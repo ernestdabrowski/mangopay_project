@@ -48,6 +48,6 @@ test.describe('Set of tests for Mangopay recruitment task', () => {
     const accessibilityScanResults = await new AxeBuilder({ page })
     .include('#searchboxinput')
     .analyze(); 
-     expect(accessibilityScanResults.violations).toEqual([1, 2,3]); 
+     expect(accessibilityScanResults.violations).toEqual([]); 
   });
 });
