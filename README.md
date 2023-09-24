@@ -12,3 +12,4 @@ Documentation used to create this project:
 What has been covered so far?
 - 2 Test Cases to cover provided acceptance criteria
 - 1 Test Case to show implementation of Axe plugin for Accessibility testing
+
