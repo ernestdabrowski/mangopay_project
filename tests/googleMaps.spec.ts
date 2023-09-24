@@ -4,6 +4,7 @@ import { googleMapsSearchLocators } from '../locators/locators';
 //Axe for Accessibility testing
 import AxeBuilder from '@axe-core/playwright';
 
+
 const googleMapsPage = "https://maps.google.com";
 
 //functions created to simplify code for common used steps
@@ -24,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Set of tests for Mangopay recruitment task', () => {
 
-  test('TC1: open Google Maps and search for Paris', async ({ page }) => {
+  test('TC1: open Maps and search for Paris', async ({ page }) => {
 
     fillSearchBar(page, 'Paris');
     //timeout added - playwright has auto-wait implemented but in this scenario we have to extend as standard 5s is not enough
@@ -32,7 +33,7 @@ test.describe('Set of tests for Mangopay recruitment task', () => {
     await expect(page.locator(googleMapsSearchLocators.directionsButton)).toBeVisible();
   });
 
-  test('TC2: open Google Maps and search for London, vefify destination field', async ({ page }) => {
+  test('TC2: open Maps and search for London, vefify destination field', async ({ page }) => {
 
     fillSearchBar(page, 'London');
 
@@ -43,8 +44,26 @@ test.describe('Set of tests for Mangopay recruitment task', () => {
     await expect(page.locator(googleMapsSearchLocators.destinationInput)).toHaveAttribute('aria-label', 'Destination London, UK');
   });
 
-  //Test case to check Axe implementatin for accessiblity testing - its failes as 
-  test('TC3: accessablity test for GoogleMaps SearchBox', async ({ page }) => {
+  test('TC3: open Maps and search for trip', async ({ page }) => {
+
+    fillSearchBar(page, 'London');
+
+    await expect(page.getByRole('heading', { name: 'London', exact: true })).toBeVisible({ timeout: 30000 });
+    await page.click(googleMapsSearchLocators.directionsButton);
+
+    await (page.locator(googleMapsSearchLocators.destinationInput)).click();
+    await expect(page.locator(googleMapsSearchLocators.destinationInput)).toHaveAttribute('aria-label', 'Destination London, UK');
+  
+    await (page.locator(googleMapsSearchLocators.startingPoint)).fill('Warsaw');
+    await (page.locator(googleMapsSearchLocators.startingPoint)).press("Enter");
+
+    await (page.locator(googleMapsSearchLocators.tripDriections)).isVisible();
+    
+  });
+  
+
+  //Test case to check Axe implementatin for accessiblity testing - checks on seachBox
+  test('TC4: accessablity test for GoogleMaps SearchBox', async ({ page }) => {
     await page.locator(googleMapsSearchLocators.searchBox).waitFor();
     try {
       const accessibilityScanResults = await new AxeBuilder({ page })
@@ -55,5 +74,4 @@ test.describe('Set of tests for Mangopay recruitment task', () => {
       console.log("error found in TC3")
     }
   });
-
 });
